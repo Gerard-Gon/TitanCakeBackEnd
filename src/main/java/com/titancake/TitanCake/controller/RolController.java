@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.titancake.TitanCake.model.Rol;
 import com.titancake.TitanCake.service.RolService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -25,6 +27,7 @@ public class RolController {
     private RolService rolService;
 
     @GetMapping
+    @Operation(summary = "listar todos los roles")
     public ResponseEntity<List<Rol>> getAllRol() {
         List<Rol> roles = rolService.findAll();
         if (roles.isEmpty()) {
@@ -34,6 +37,7 @@ public class RolController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Listar rol por id")
     public ResponseEntity<Rol> getRolById(@PathVariable Integer id) {
         Rol rol = rolService.findById(id);
         if (rol == null) {
@@ -43,6 +47,7 @@ public class RolController {
     }
 
     @PostMapping
+    @Operation(summary = "Agregar rol")
     public ResponseEntity<Rol> createRol(@RequestBody Rol rol) {
         Rol createdRol = rolService.save(rol);
         return ResponseEntity.status(201).body(createdRol);
