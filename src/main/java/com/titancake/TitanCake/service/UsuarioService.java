@@ -47,6 +47,9 @@ public class UsuarioService {
             if(parcialUsuario.getCorreo()!=null){
                 usuarioToUpdate.setCorreo(parcialUsuario.getCorreo());
             }
+            if(parcialUsuario.getRol()!=null){
+                usuarioToUpdate.setRol(parcialUsuario.getRol());
+            }
 
             return usuarioRepository.save(usuarioToUpdate);
         } else {

@@ -32,6 +32,9 @@ public class Usuario {
     @Column(unique=true,nullable = false)
     private String correo;
 
+    @Column(unique=true,nullable=false)
+    private String rol;
+
 
 
 }

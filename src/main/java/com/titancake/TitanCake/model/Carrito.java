@@ -24,8 +24,10 @@ public class Carrito{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
+    private Integer cantidad;
 
-    @Column(nullable = true)
-    private Integer precioTotal;
+    @Column(nullable = false)
+    private Integer total;
 
 }

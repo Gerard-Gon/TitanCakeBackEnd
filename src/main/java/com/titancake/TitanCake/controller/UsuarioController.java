@@ -50,9 +50,10 @@ public class UsuarioController {
         }
     }
 
+    //En caso de error revisar esta parte
     @PostMapping
     @Operation(summary = "Agrega un usuario")
-    public ResponseEntity<Usuario> createCarrera(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
         Usuario createdUsuario = usuarioService.saveUsuario(usuario);
         return ResponseEntity.status(201).body(createdUsuario);
     }
