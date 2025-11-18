@@ -4,6 +4,6 @@ import com.titancake.TitanCake.model.Usuario;
 
 
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+    Usuario findByCorreo(String correo);
 }

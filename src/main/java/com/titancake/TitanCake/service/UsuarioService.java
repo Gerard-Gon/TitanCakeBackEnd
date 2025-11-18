@@ -1,61 +1,87 @@
 package com.titancake.TitanCake.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.titancake.TitanCake.model.Usuario;
 import com.titancake.TitanCake.repository.UsuarioRepository;
 
-@Service
-public class UsuarioService {
+import jakarta.transaction.Transactional;
 
+@Service
+@Transactional
+@SuppressWarnings("null")
+
+public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> getAllUsuario() {
-        return usuarioRepository.findAll();
+    @Autowired
+    private PasswordEncoder passwordEncoder; 
+
+
+    public List<Usuario> findAll() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarios;
     }
 
-    public Usuario getUsuarioById(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
+    public Usuario findById(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            usuario.setContrasena(null);
+        }
+        return usuario;
     }
 
-    public Usuario saveUsuario(Usuario usuario) {
+    public Usuario login(Usuario usuario) {
+        Usuario foundUsuario = usuarioRepository.findByCorreo(usuario.getCorreo());
+ 
+        if (foundUsuario != null &&  passwordEncoder.matches(usuario.getContrasena(), foundUsuario.getContrasena())) {
+            return foundUsuario;
+        }
+
+        return null;
+    }
+
+    public Usuario updateUsuario(Usuario usuario) {
+        return save(usuario);
+    }
+
+    public Usuario save(Usuario usuario) {
+        String passwordHasheada = passwordEncoder.encode(usuario.getContrasena());
+        usuario.setContrasena(passwordHasheada);
         return usuarioRepository.save(usuario);
     }
 
-    public void deleteUsuario(Long id) {
-        usuarioRepository.deleteById(id);
+    public Usuario partialUpdate(Usuario usuario){
+        Usuario existingUsuario = usuarioRepository.findById(usuario.getId()).orElse(null);
+        if (existingUsuario != null) {
+            if (usuario.getNombre() != null) {
+                existingUsuario.setNombre(usuario.getNombre());
+            }
+            if (usuario.getCorreo() != null) {
+                existingUsuario.setCorreo(usuario.getCorreo());
+            }
+
+            if(usuario.getContrasena() != null) {
+                existingUsuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+            }
+
+            if(usuario.getRol() != null) {
+                existingUsuario.setRol(usuario.getRol());
+            }
+
+            return usuarioRepository.save(existingUsuario);
+        }
+        return null;
     }
 
-    public Usuario patchUsuario(Long id, Usuario parcialUsuario){
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
-        if (usuarioOptional.isPresent()) {
-
-            Usuario usuarioToUpdate = usuarioOptional.get();
-
-            if (parcialUsuario.getNombreUsuario() != null) {
-                usuarioToUpdate.setNombreUsuario(parcialUsuario.getNombreUsuario());
-            }
-
-            if(parcialUsuario.getPassword() != null){
-                usuarioToUpdate.setPassword(parcialUsuario.getPassword());
-            }
-            if(parcialUsuario.getCorreo()!=null){
-                usuarioToUpdate.setCorreo(parcialUsuario.getCorreo());
-            }
-            if(parcialUsuario.getRol()!=null){
-                usuarioToUpdate.setRol(parcialUsuario.getRol());
-            }
-
-            return usuarioRepository.save(usuarioToUpdate);
-        } else {
-            return null; // or throw an exception
-        }
-
+    public void deleteById(Integer id) {
+        usuarioRepository.deleteById(id);
     }
 
     

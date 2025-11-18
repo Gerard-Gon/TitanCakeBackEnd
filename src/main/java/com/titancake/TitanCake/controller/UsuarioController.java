@@ -3,6 +3,7 @@ package com.titancake.TitanCake.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,62 +21,84 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping("/api/v1usuarios")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping
-    @Operation(summary = "Muestra una lista de los usuarios registrados")
-    public List<Usuario> getAllUsuarios() {
-        return usuarioService.getAllUsuario();
+    @Operation(summary = "Listar todos los  usuario")
+    public ResponseEntity<List<Usuario>> getallUsuario() {
+        List<Usuario> usuarios = usuarioService.findAll();
+        if (usuarios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Obtener usuario por su id")
-    public Usuario getUsuarioById(@PathVariable Long id) {
-        return usuarioService.getUsuarioById(id);
-    }
-
-    @PatchMapping("/{id}")
-    @Operation(summary = "Actualizar un usuario parcialmente")
-    public ResponseEntity<Usuario> patchUsuario(@PathVariable Long id , @RequestBody Usuario parcialUsuario){
-        try {
-            Usuario updateUsuario = usuarioService.patchUsuario(id, parcialUsuario);
-            return ResponseEntity.ok(updateUsuario);
-            
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+        Usuario login = usuarioService.login(usuario);
+        
+        if (login != null) {
+            login.setContrasena(null);
+            return ResponseEntity.ok(login);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
     }
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "lista un usuario por id ")
+    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Integer id) {
+        Usuario usuario = usuarioService.findById(id);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(usuario);
+    }
 
-    //En caso de error revisar esta parte
     @PostMapping
-    @Operation(summary = "Agrega un usuario")
+    @Operation(summary = "Crea un usuario nuevo")
     public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
-        Usuario createdUsuario = usuarioService.saveUsuario(usuario);
-        return ResponseEntity.status(201).body(createdUsuario);
+        usuario.setId(null);
+        Usuario usuarioNew = usuarioService.save(usuario);
+        return ResponseEntity.status(201).body(usuarioNew);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar un usuario")
-    public Usuario updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        Usuario existingUsuario = usuarioService.getUsuarioById(id);
-        if (existingUsuario != null) {
-            existingUsuario.setNombreUsuario(usuario.getNombreUsuario());
-            existingUsuario.setCorreo(usuario.getCorreo());
-            existingUsuario.setPassword(usuario.getPassword());
-            return usuarioService.saveUsuario(existingUsuario);
+    @Operation(summary = "Cambios en el usuario")
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable Integer id, @RequestBody Usuario usuario) {
+        usuario.setId(id);
+        Usuario updatedUsuario = usuarioService.save(usuario);
+        if (updatedUsuario == null) {
+            return ResponseEntity.notFound().build();
         }
-        return null;
+        return ResponseEntity.ok(updatedUsuario);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Cambios parcialmente en el usuario")
+    public ResponseEntity<Usuario> updateParcialUsuario(@PathVariable Integer id, @RequestBody Usuario usuario) {
+        usuario.setId(id);
+        Usuario updatedUsuario = usuarioService.partialUpdate(usuario);
+        if (updatedUsuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedUsuario);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un usuario")
-    public void deleteUsuario(@PathVariable Long id) {
-        
-    }
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Integer id) {
+        usuarioService.deleteById(id);
+        return ResponseEntity.noContent().build();  
+    } 
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("OK");
+    }   
 
 
 
