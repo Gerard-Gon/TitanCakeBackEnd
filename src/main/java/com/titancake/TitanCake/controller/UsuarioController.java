@@ -95,10 +95,6 @@ public class UsuarioController {
         usuarioService.deleteById(id);
         return ResponseEntity.noContent().build();  
     } 
-    @GetMapping("/health")
-    public ResponseEntity<String> health() {
-        return ResponseEntity.ok("OK");
-    }   
 
 
 
