@@ -18,7 +18,7 @@ public class SwaggerConfig {
            new Info()
            .title("API TitanCake")
            .version("0.1")
-           .description("Api de repaso")
+           .description("Api para nuestro E-COMMERCE TitanCake ")
        );
    }
 
