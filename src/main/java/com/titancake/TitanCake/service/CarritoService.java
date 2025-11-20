@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-@SuppressWarnings("null")
+@SuppressWarnings("null")//No estoy seguro la funcionalidad de esta etiqueta
 public class CarritoService {
     @Autowired
     private CarritoRepository carritoRepository;
@@ -27,7 +27,7 @@ public class CarritoService {
     public Carrito save(Carrito carrito) {
         return carritoRepository.save(carrito);
     }
-
+    //Eliminacion normal y de cascada:Revisar en caso de no funcionar
     public void deleteById(Integer id) {
         carritoRepository.deleteById(id);
     }

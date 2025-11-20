@@ -23,7 +23,8 @@ import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping("/api/v1/recetas")
 public class RecetaController {
-
+    //Aca me falta agregar el responseEntity en todo, 
+    // pero aun no esta hecho por que no afecta a ninguna de las funcionalidades mas importantes del front.
     @Autowired
     private RecetaService recetaService;
 

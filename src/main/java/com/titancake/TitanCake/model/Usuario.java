@@ -32,6 +32,7 @@ public class Usuario {
     private String correo;
 
     @Column(name = "contrasenaUsuario", length = 100, nullable = false)
+    //No estoy muy seguro de cual es la diferencia entre jsonignore y jsonproperty
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String contrasena;
 

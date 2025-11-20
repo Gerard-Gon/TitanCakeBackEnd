@@ -38,6 +38,6 @@ public class Producto {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(nullable=true)
+    @Column(nullable=true)//Esta era mi idea para poner una imagen, no entendi muy bien lo de crear otra tabla
     private String imageUrl;
 }

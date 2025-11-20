@@ -11,7 +11,7 @@ import io.swagger.v3.oas.models.info.Info;
 @Configuration
 public class SwaggerConfig {
 
-
+    // Configuracion de swagger (principalmente es nombre-version-descripcion)
    @Bean
    public OpenAPI customOpenAPI(){
        return new OpenAPI().info(

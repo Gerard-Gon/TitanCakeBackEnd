@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig {
+    //Configuracion de CORS (Abre el dominio y permite consumir la api desde nuestro front)
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
