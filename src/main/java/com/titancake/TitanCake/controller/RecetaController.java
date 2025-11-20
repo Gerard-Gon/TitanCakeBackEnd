@@ -34,13 +34,13 @@ public class RecetaController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener receta por su id")
-    public Receta getRecetaById(@PathVariable Long id) {
+    public Receta getRecetaById(@PathVariable Integer id) {
         return recetaService.getRecetaById(id);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Actualizar una receta parcialmente")
-    public ResponseEntity<Receta> patchReceta(@PathVariable Long id , @RequestBody Receta parcialReceta){
+    public ResponseEntity<Receta> patchReceta(@PathVariable Integer id , @RequestBody Receta parcialReceta){
         try {
             Receta updateReceta = recetaService.patchReceta(id, parcialReceta);
             return ResponseEntity.ok(updateReceta);
@@ -60,7 +60,7 @@ public class RecetaController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar una receta")
-    public Receta updateReceta(@PathVariable Long id, @RequestBody Receta receta) {
+    public Receta updateReceta(@PathVariable Integer id, @RequestBody Receta receta) {
         Receta existingReceta = recetaService.getRecetaById(id);
         if (existingReceta != null) {
             existingReceta.setNombreReceta(receta.getNombreReceta());

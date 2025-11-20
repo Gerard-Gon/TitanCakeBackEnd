@@ -27,53 +27,60 @@ public class ProductoController {
     private ProductoService productoService;
 
     @GetMapping
-    @Operation(summary = "Muestra una lista de los productos")
-    public List<Producto> getAllProductos() {
-        return productoService.getAllProducto();
+    @Operation(summary = "Lista todos los productos")
+    public ResponseEntity<List<Producto>> getAllProductos() {
+        List<Producto> productos = productoService.findAll();
+        if (productos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(productos);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener producto por su id")
-    public Producto getProductoById(@PathVariable Long id) {
-        return productoService.getProductoById(id);
-    }
-
-    @PatchMapping("/{id}")
-    @Operation(summary = "Actualizar un producto parcialmente")
-    public ResponseEntity<Producto> patchProducto(@PathVariable Long id , @RequestBody Producto parcialProducto){
-        try {
-            Producto updateProducto = productoService.patchProducto(id, parcialProducto);
-            return ResponseEntity.ok(updateProducto);
-            
-        } catch (RuntimeException e) {
+    @Operation(summary = "Muestra producto por id")
+    public ResponseEntity<Producto> getProductosById(@PathVariable Integer id) {
+        Producto producto = productoService.findById(id);
+        if (producto == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(producto);
     }
+
     @PostMapping
     @Operation(summary = "Agrega un producto")
-    public ResponseEntity<Producto> createProducto(@RequestBody Producto producto) {
-        Producto createdProducto = productoService.saveProducto(producto);
+    public ResponseEntity<Producto> createFaccion(@RequestBody Producto producto) {
+        Producto createdProducto = productoService.save(producto);
         return ResponseEntity.status(201).body(createdProducto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un producto")
-    public Producto updateProducto(@PathVariable Long id, @RequestBody Producto producto) {
-        Producto existingProducto = productoService.getProductoById(id);
-        if (existingProducto != null) {
-            existingProducto.setNombreProducto(producto.getNombreProducto());
-            existingProducto.setDescripcionProducto(producto.getDescripcionProducto());
-            existingProducto.setPrecio(producto.getPrecio());
-            existingProducto.setStock(producto.getStock());
-            return productoService.saveProducto(existingProducto);
+    public ResponseEntity<Producto> updateProducto(@PathVariable Integer id, @RequestBody Producto producto) {
+        producto.setId(id);
+        Producto updatedProducto = productoService.save(producto);
+        if (updatedProducto == null) {
+            return ResponseEntity.notFound().build();
         }
-        return null;
+        return ResponseEntity.ok(updatedProducto);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Actualiza producto parcialmente")
+    public ResponseEntity<Producto> updatePartialProducto(@PathVariable Integer id, @RequestBody Producto producto) {
+        producto.setId(id);
+        Producto updatedProducto = productoService.partialUpdate(producto);
+        if (updatedProducto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedProducto);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar un producto")
-    public void deleteProducto(@PathVariable Long id) {
-        
+    @Operation(summary = "Elimina un producto")
+    public ResponseEntity<Void> deleteFaccion(@PathVariable Integer id) {
+        productoService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
-    
 }
+    
+

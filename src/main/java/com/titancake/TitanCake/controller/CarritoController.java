@@ -28,50 +28,55 @@ public class CarritoController {
 
     @GetMapping
     @Operation(summary = "Muestra una lista de los carritos")
-    public List<Carrito> getAllCartrCarritos() {
-        return carritoService.getAllCarritos();
+    public ResponseEntity<List<Carrito>> getAllCartrCarritos() {
+        List<Carrito> carritos = carritoService.findAll();
+        if (carritos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(carritos);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener carrito por su id")
-    public Carrito getCarritoById(@PathVariable Long id) {
-        return carritoService.getCarritoById(id);
+    public ResponseEntity<Carrito> getCarritoById(@PathVariable Integer id) {
+        Carrito carrito = carritoService.findById(id);
+        if (carrito == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(carrito);
     }
 
     @PatchMapping("/{id}")
-    @Operation(summary = "Actualizar un carrito parcialmente")
-    public ResponseEntity<Carrito> patchProducto(@PathVariable Long id , @RequestBody Carrito parcialCarrito){
-        try {
-            Carrito updateCarrito = carritoService.patchCarrito(id, parcialCarrito);
-            return ResponseEntity.ok(updateCarrito);
-            
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Carrito> partialUpdateCarrito(@PathVariable Integer id, @RequestBody Carrito carrito) {
+        Carrito existingCarrito = carritoService.findById(id);
+        if (existingCarrito == null) {
+            return ResponseEntity.notFound().build();  
         }
+        return ResponseEntity.ok(carritoService.partialUpdate(carrito));
     }
     @PostMapping
     @Operation(summary = "Agrega un carrito")
     public ResponseEntity<Carrito> createCarrito(@RequestBody Carrito carrito) {
-        Carrito createdCarrito = carritoService.saveCarrito(carrito);
+        Carrito createdCarrito = carritoService.save(carrito);
         return ResponseEntity.status(201).body(createdCarrito);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un carrito")
-    public Carrito updateCarrito(@PathVariable Long id, @RequestBody Carrito carrito) {
-        Carrito existingCarrito = carritoService.getCarritoById(id);
-        if (existingCarrito != null) {
-            existingCarrito.setCantidad(carrito.getCantidad());
-            existingCarrito.setTotal(carrito.getTotal());
-            return carritoService.saveCarrito(existingCarrito);
+    public ResponseEntity<Carrito> updateCarrito(@PathVariable Integer id, @RequestBody Carrito carrito) {
+        carrito.setId(id);
+        Carrito updatedCarrito = carritoService.save(carrito);
+        if (updatedCarrito == null) {
+            return ResponseEntity.notFound().build();  
         }
-        return null;
+        return ResponseEntity.ok(updatedCarrito);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un carrito")
-    public void deleteCarrito(@PathVariable Long id) {
-        
+    public ResponseEntity<Void> deleteCarrito(@PathVariable Integer id) {
+        carritoService.deleteById(id);
+        return ResponseEntity.noContent().build();  
     }
     
 }

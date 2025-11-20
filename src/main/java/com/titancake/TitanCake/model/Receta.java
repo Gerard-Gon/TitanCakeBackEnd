@@ -20,7 +20,7 @@ public class Receta{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     @Column(length = 50,nullable = false)
     private String nombreReceta;

@@ -23,6 +23,9 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder; 
 
+    @Autowired
+    private CarritoService carritoService;
+
 
     public List<Usuario> findAll() {
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -81,6 +84,7 @@ public class UsuarioService {
     }
 
     public void deleteById(Integer id) {
+        carritoService.deleteByUsuarioId(id);
         usuarioRepository.deleteById(id);
     }
 

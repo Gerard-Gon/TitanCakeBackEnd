@@ -15,7 +15,7 @@ public class RecetaService {
     public List<Receta> getAllRecetas() {
     return recetaRepository.findAll();
     }
-    public Receta getRecetaById(Long id) {
+    public Receta getRecetaById(Integer id) {
         return recetaRepository.findById(id).orElse(null);
     }
 
@@ -23,11 +23,11 @@ public class RecetaService {
         return recetaRepository.save(receta);
     }
 
-    public void deleteReceta(Long id) {
+    public void deleteReceta(Integer id) {
         recetaRepository.deleteById(id);
     }
 
-public Receta patchReceta(Long id, Receta parcialReceta){
+public Receta patchReceta(Integer id, Receta parcialReceta){
         Optional<Receta> recetaOptional = recetaRepository.findById(id);
         if (recetaOptional.isPresent()) {
 
