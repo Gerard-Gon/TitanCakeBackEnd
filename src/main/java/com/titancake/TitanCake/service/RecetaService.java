@@ -7,8 +7,13 @@ import org.springframework.stereotype.Service;
 import com.titancake.TitanCake.model.Receta;
 import com.titancake.TitanCake.repository.RecetaRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class RecetaService {
+
+
     @Autowired
     private RecetaRepository recetaRepository;
 

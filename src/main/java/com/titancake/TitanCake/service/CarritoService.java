@@ -15,14 +15,16 @@ public class CarritoService {
     @Autowired
     private CarritoRepository carritoRepository;
 
-    public List<Carrito> getAllCarritos() {
-    return carritoRepository.findAll();
-    }
-    public Carrito getCarritoById(Integer id) {
-        return carritoRepository.findById(id).orElse(null);
+    public List<Carrito> findAll() {
+        return carritoRepository.findAll();
     }
 
-    public Carrito saveCarrito(Carrito carrito) {
+    public Carrito findById(Integer id) {
+        Carrito carrito = carritoRepository.findById(id).orElse(null);
+        return carrito;
+    }
+
+    public Carrito save(Carrito carrito) {
         return carritoRepository.save(carrito);
     }
 
