@@ -9,7 +9,7 @@ import com.titancake.TitanCake.model.ItemCarrito;
 public interface ItemCarritoRepository extends JpaRepository<ItemCarrito , Integer> {
 
 
-    List<ItemCarritoRepository> findByCarritoId(Integer carritoId); 
-    List<ItemCarritoRepository> findByProductoId(Integer productoId);
+    List<ItemCarrito> findByCarritoId(Integer carritoId); 
+    List<ItemCarrito> findByProductoId(Integer productoId);
     
 }
