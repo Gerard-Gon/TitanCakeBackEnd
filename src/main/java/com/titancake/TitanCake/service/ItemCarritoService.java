@@ -35,6 +35,24 @@ public class ItemCarritoService {
         itemCarritoRepository.deleteById(id);
     }
 
+    public void deleteByProductoId(Integer productoId) {
+        List<ItemCarrito> itemscarrito = itemCarritoRepository.findAll();
+        for (ItemCarrito itemCarrito : itemscarrito) {
+            if (itemCarrito.getProducto() != null && itemCarrito.getProducto().getId().equals(productoId)) {
+                itemCarritoRepository.deleteById(itemCarrito.getId());
+            }
+        }
+    }
+
+    public void deleteByCarritoId(Integer carritoId) {
+        List<ItemCarrito> carritos = itemCarritoRepository.findAll();
+        for (ItemCarrito itemCarrito : carritos) {
+            if (itemCarrito.getCarrito() != null && itemCarrito.getCarrito().getId().equals(carritoId)) {
+                itemCarritoRepository.deleteById(itemCarrito.getId());
+            }
+        }
+    }
+
 
     public ItemCarrito partialUpdate(ItemCarrito itemCarrito){
         ItemCarrito existingItem = itemCarritoRepository.findById(itemCarrito.getId()).orElse(null);

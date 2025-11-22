@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.titancake.TitanCake.model.Producto;
 import com.titancake.TitanCake.repository.ProductoRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -14,6 +13,9 @@ import jakarta.transaction.Transactional;
 public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private ItemCarritoService itemCarritoService;
 
 
     public List<Producto> findAll() {
@@ -30,7 +32,10 @@ public class ProductoService {
     }
 
     public void deleteById(Integer id) {
+        itemCarritoService.deleteByProductoId(id);
+        
         productoRepository.deleteById(id);
+        
     }
 
     public Producto partialUpdate(Producto producto){
@@ -54,10 +59,8 @@ public class ProductoService {
             if (producto.getCategoria()!=null) {
                 existingProducto.setCategoria(producto.getCategoria());
             }
-
             return productoRepository.save(existingProducto);
         }
         return null;
     }
-    
 }

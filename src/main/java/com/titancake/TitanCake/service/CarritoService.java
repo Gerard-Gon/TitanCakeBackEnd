@@ -15,6 +15,9 @@ public class CarritoService {
     @Autowired
     private CarritoRepository carritoRepository;
 
+    @Autowired
+    private ItemCarritoService itemCarritoService;
+
     public List<Carrito> findAll() {
         return carritoRepository.findAll();
     }
@@ -29,15 +32,14 @@ public class CarritoService {
     }
     //Eliminacion normal y de cascada:Revisar en caso de no funcionar
     public void deleteById(Integer id) {
+        itemCarritoService.deleteByCarritoId(id);
         carritoRepository.deleteById(id);
     }
 
     public void deleteByUsuarioId(Integer usuarioId) {
-        List<Carrito> carritos = carritoRepository.findAll();
+        List<Carrito> carritos = carritoRepository.findByUsuarioId(usuarioId);
         for (Carrito carrito : carritos) {
-            if (carrito.getUsuario() != null && carrito.getUsuario().getId().equals(usuarioId)) {
-                carritoRepository.deleteById(carrito.getId());
-            }
+            this.deleteById(carrito.getId()); 
         }
     }
 
