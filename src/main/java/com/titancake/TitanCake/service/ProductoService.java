@@ -15,10 +15,8 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    @Autowired
-    private CarritoService carritoService;
 
-  public List<Producto> findAll() {
+    public List<Producto> findAll() {
         return productoRepository.findAll();
     }
 
@@ -32,7 +30,6 @@ public class ProductoService {
     }
 
     public void deleteById(Integer id) {
-        carritoService.deleteByProductoId(id);
         productoRepository.deleteById(id);
     }
 
@@ -54,7 +51,9 @@ public class ProductoService {
             if (producto.getImageUrl()!=null) {
                 existingProducto.setImageUrl(producto.getImageUrl());
             }
-
+            if (producto.getCategoria()!=null) {
+                existingProducto.setCategoria(producto.getCategoria());
+            }
 
             return productoRepository.save(existingProducto);
         }

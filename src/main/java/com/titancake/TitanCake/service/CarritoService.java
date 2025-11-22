@@ -31,14 +31,6 @@ public class CarritoService {
     public void deleteById(Integer id) {
         carritoRepository.deleteById(id);
     }
-    public void deleteByProductoId(Integer productoId) {
-        List<Carrito> carritos = carritoRepository.findAll();
-        for (Carrito carrito : carritos) {
-            if (carrito.getProducto() != null && carrito.getProducto().getId().equals(productoId)) {
-                carritoRepository.deleteById(carrito.getId());
-            }
-        }
-    }
 
     public void deleteByUsuarioId(Integer usuarioId) {
         List<Carrito> carritos = carritoRepository.findAll();
@@ -52,16 +44,9 @@ public class CarritoService {
     public Carrito partialUpdate(Carrito carrito){
         Carrito existingCarrito = carritoRepository.findById(carrito.getId()).orElse(null);
         if (existingCarrito != null) {
-            if (carrito.getCantidad() != null) {
-                existingCarrito.setCantidad(carrito.getCantidad());
+            if (carrito.getUsuario() != null) {
+                existingCarrito.setUsuario(carrito.getUsuario());
             }
-            if (existingCarrito.getTotal()!=null) {
-                existingCarrito.setTotal(carrito.getTotal());
-            }
-            //Aca deberia agregar otra cosa a customizar como productos o no ?
-
-
-
             return carritoRepository.save(existingCarrito);
         }
         return null;

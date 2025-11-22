@@ -1,49 +1,43 @@
 package com.titancake.TitanCake.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import lombok.AllArgsConstructor;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-@Entity
 @Data
-@AllArgsConstructor
+@Entity
+@Table(name="item_carrito")
 @NoArgsConstructor
-@Table (name="producto")
-
-
-public class Producto {
-
+@AllArgsConstructor
+public class ItemCarrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 50,nullable = false)
-    private String nombreProducto;
+    @Column(nullable = false)
+    private Integer cantidad;
 
     @Column(nullable = false)
-    private Integer precio;
+    private Integer precioUnitario; 
 
-    @Column(length = 500,nullable = true)
-    private String descripcionProducto;
-
-    @Column(nullable = false)
-    private Integer stock;
-
-    @Column(nullable=true)//Esta era mi idea para poner una imagen, no entendi muy bien lo de crear otra tabla
-    private String imageUrl;
-
+    
     @ManyToOne
-    @JoinColumn(name="categoria_id")
-    private Categoria categoria;
+    @JoinColumn(name = "carrito_id", nullable = false)
+    private Carrito carrito;
+
+    
+    @ManyToOne
+    @JoinColumn(name = "producto_id", nullable = false)
+    private Producto producto;
+
+    
 }
