@@ -72,7 +72,7 @@ public class CategoriaController {
     
     
     @PatchMapping("/{id}")
-    @Operation(summary = "Actualiza una categoría parcialmente (ej. solo el nombre)")
+    @Operation(summary = "Actualiza una categoría parcialmente")
     public ResponseEntity<Categoria> updatePartialCategoria(@PathVariable Integer id, @RequestBody Categoria categoria) {
         categoria.setId(id);
         Categoria updatedCategoria = categoriaService.partialUpdate(categoria);

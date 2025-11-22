@@ -16,49 +16,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 
 import com.titancake.TitanCake.model.ItemCarrito;
-import com.titancake.TitanCake.service.ItemCarritoService; // 👈 Inyectamos el Servicio
+import com.titancake.TitanCake.service.ItemCarritoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/api/v1/itemscarrito") // Endpoint base
+@RequestMapping("/api/v1/itemscarrito")
 public class ItemCarritoController {
 
     @Autowired
     private ItemCarritoService itemCarritoService;
 
-    // 🏆 GET /api/v1/itemscarrito
+
     @GetMapping
     @Operation(summary = "Muestra una lista de todos los ítems del carrito (general)")
     public ResponseEntity<List<ItemCarrito>> getAllItemCarritos() {
         List<ItemCarrito> items = itemCarritoService.findAll();
         if (items.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(items); // 200 OK
+        return ResponseEntity.ok(items); 
     }
 
-    // 🏆 GET /api/v1/itemscarrito/{id}
+
     @GetMapping("/{id}")
     @Operation(summary = "Obtiene un ítem del carrito por su ID")
     public ResponseEntity<ItemCarrito> getItemCarritoById(@PathVariable Integer id) {
         ItemCarrito item = itemCarritoService.findById(id);
         if (item == null) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build(); 
         }
-        return ResponseEntity.ok(item); // 200 OK
+        return ResponseEntity.ok(item);
     }
 
-    // 🏆 POST /api/v1/itemscarrito
+
     @PostMapping
     @Operation(summary = "Agrega un nuevo ítem al carrito (o actualiza si existe)")
     public ResponseEntity<ItemCarrito> createItemCarrito(@RequestBody ItemCarrito itemCarrito) {
-        itemCarrito.setId(null); // Asegura que el ID se genera en la base de datos
+        itemCarrito.setId(null);
         ItemCarrito createdItem = itemCarritoService.save(itemCarrito);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdItem); // 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdItem);
     }
 
-    // 🏆 PUT /api/v1/itemscarrito/{id}
+
     @PutMapping("/{id}")
     @Operation(summary = "Actualiza un ítem del carrito completamente")
     public ResponseEntity<ItemCarrito> updateItemCarrito(@PathVariable Integer id, @RequestBody ItemCarrito itemCarrito) {
@@ -66,12 +66,12 @@ public class ItemCarritoController {
         ItemCarrito updatedItem = itemCarritoService.save(itemCarrito);
         
         if (updatedItem == null) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build(); 
         }
-        return ResponseEntity.ok(updatedItem); // 200 OK
+        return ResponseEntity.ok(updatedItem); 
     }
 
-    // 🏆 PATCH /api/v1/itemscarrito/{id}
+
     @PatchMapping("/{id}")
     @Operation(summary = "Actualiza un ítem del carrito parcialmente (ej. la cantidad)")
     public ResponseEntity<ItemCarrito> updatePartialItemCarrito(@PathVariable Integer id, @RequestBody ItemCarrito itemCarrito) {
@@ -79,16 +79,16 @@ public class ItemCarritoController {
         ItemCarrito updatedItem = itemCarritoService.partialUpdate(itemCarrito);
 
         if (updatedItem == null) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build(); 
         }
-        return ResponseEntity.ok(updatedItem); // 200 OK
+        return ResponseEntity.ok(updatedItem); 
     }
 
-    // 🏆 DELETE /api/v1/itemscarrito/{id}
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Elimina un ítem específico del carrito")
     public ResponseEntity<Void> deleteItemCarrito(@PathVariable Integer id) {
         itemCarritoService.deleteById(id);
-        return ResponseEntity.noContent().build(); // 204 No Content (Éxito sin contenido de respuesta)
+        return ResponseEntity.noContent().build();
     }
 }
