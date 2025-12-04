@@ -58,6 +58,7 @@ public class CarritoController {
     @PostMapping
     @Operation(summary = "Agrega un carrito")
     public ResponseEntity<Carrito> createCarrito(@RequestBody Carrito carrito) {
+        carrito.setId(null); 
         Carrito createdCarrito = carritoService.save(carrito);
         return ResponseEntity.status(201).body(createdCarrito);
     }

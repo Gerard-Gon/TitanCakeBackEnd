@@ -50,6 +50,7 @@ public class ProductoController {
     @PostMapping
     @Operation(summary = "Agrega un producto")
     public ResponseEntity<Producto> createFaccion(@RequestBody Producto producto) {
+        producto.setId(null); 
         Producto createdProducto = productoService.save(producto);
         return ResponseEntity.status(201).body(createdProducto);
     }

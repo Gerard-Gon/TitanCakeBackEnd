@@ -78,6 +78,10 @@ public class UsuarioService {
                 existingUsuario.setRol(usuario.getRol());
             }
 
+            if (usuario.getAuthFireBase() != null) {
+                existingUsuario.setAuthFireBase(usuario.getAuthFireBase());
+            }
+
             return usuarioRepository.save(existingUsuario);
         }
         return null;

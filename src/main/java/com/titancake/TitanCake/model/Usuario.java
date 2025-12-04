@@ -30,6 +30,9 @@ public class Usuario {
 
     @Column(name = "correoUsuario", length = 50, nullable = false)
     private String correo;
+    
+    @Column(name = "authFireBase",nullable = true)
+    private String authFireBase;
 
     @Column(name = "contrasenaUsuario", length = 100, nullable = false)
     //No estoy muy seguro de cual es la diferencia entre jsonignore y jsonproperty

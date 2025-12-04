@@ -49,6 +49,7 @@ public class RolController {
     @PostMapping
     @Operation(summary = "Agregar rol")
     public ResponseEntity<Rol> createRol(@RequestBody Rol rol) {
+        rol.setId(null); 
         Rol createdRol = rolService.save(rol);
         return ResponseEntity.status(201).body(createdRol);
     }
